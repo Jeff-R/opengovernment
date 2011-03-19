@@ -155,7 +155,7 @@
               %h4= t '.committees'
               .small
                 = succeed ',' do
-                  = link_to pluralize(chamber.primary_committees.count, t('.committee')), chamber.type == 'UpperChamber' ? upper_committees_path : lower_committees_path
+                  = link_to pluralize(chamber.primary_committees.count, t('.committee')), chamber.type == 'UpperChamber' ? upper_committees_url : lower_committees_url
                 %br
     
                 = link_to pluralize(@state.joint_committees.count, t('.joint_committee')), joint_committees_path
