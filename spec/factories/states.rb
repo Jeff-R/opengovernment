@@ -1,9 +1,16 @@
 Factory.define :state do |s|
-  s.name "Texas"
-  s.abbrev "TX"
-  s.fips_code 27
+  s.name "Maryland"
+  s.abbrev "MD"
+  s.fips_code 24
   s.official_url "http://www.google.com"
 end
+
+# Factory.define :state do |s|
+#   s.name "Texas"
+#   s.abbrev "TX"
+#   s.fips_code 27
+#   s.official_url "http://www.google.com"
+# end
 
 
   # create_table "states", :force => true do |t|

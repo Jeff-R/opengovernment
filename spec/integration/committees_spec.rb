@@ -1,39 +1,96 @@
 # require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 require 'spec_helper'
-require 'capybara/rspec'
-# require 'webrat/integrations/rspec-rails'
+
+describe "Capybara with a subdomain" do
+  before :each do
+    @leg = Factory.create(:legislature)
+    @committees = []
+    @committees << Factory.create(:committee, :legislature => @leg)
+    @committees << Factory.create(:committee, :legislature => @leg)
+  end
+
+  it "should visit a page correctly using a default_host" do
+    Capybara.default_host = "md.www.example.com"
+    visit upper_committees_path
+
+    page.should have_content "Maryland Committees"
+  end
+
+  it "should navigate to a page by clicks without a default_host" do
+    pending "We need to fill out the factories with some bills."
+    visit "/"
+    click_on "Maryland"
+    click_on "People"
+    click_on "Committees"
+
+    page.should have_content "Maryland Committees"
+  end
+
+end
+
+describe "Factories" do
+  before :each do
+    Capybara.default_host = "md.www.example.com"
+    @md  = Factory.create(:state)
+    @leg = Factory.create(:legislature, :state => @md)
+    @committees = []
+    @committees << Factory.create(:committee, :legislature => @leg)
+    @committees << Factory.create(:committee, :legislature => @leg)
+    @committees << Factory.build(:committee, :legislature => @leg)
+  end
+
+  it "should make Maryland committees" do
+    # @leg = Factory.create(:legislature, :name => "Maryland")
+    # @leg = Factory.create(:legislature)
+    # puts "state is #{@leg.state.name}"
+
+
+    @committees << Factory.create(:committee, :legislature => @leg)
+    @committees << Factory.create(:committee, :legislature => @leg)
+    @committees << Factory.create(:committee, :legislature => @leg)
+    @committees << Factory.create(:committee, :legislature => @leg)
+    @committees << Factory.create(:committee, :legislature => @leg)
+
+    # puts "@leg = #{@leg.inspect}"
+    # committees.each do |c|
+    #   puts "committee: #{c.inspect}"
+    # end
+
+    puts "------------------------------"
+    puts "Visiting upper_committees_path"
+    puts ""
+    visit committees_url
+    visit upper_committees_path
+    # puts page.body
+
+    page.should have_content "Maryland Committees"
+  end
+
+  # it "should have all the states, from fixtures, already" do
+
+  #   State.all.each do |state|
+  #     puts "state: #{state.inspect}"
+  #   end
+  # end
+
+end
 
 describe "Committees Page" do
   before do
-    # @request.host = "tx.example.org"
-    # Capybara.default_host = "tx.example.com"
-    # Capybara.app_host = "http://tx.example.com:9887" if Capybara.current_driver == :culerity
-
-    Capybara.configure do |c|
-      c.app_host = "http://tx.example.com"
-    end
-
+    Capybara.default_host = "md.www.example.com"
+    @leg = Factory.create(:legislature)
+    @committees = []
+    @committees << Factory.create(:committee, :legislature => @leg)
+    @committees << Factory.create(:committee, :legislature => @leg)
   end
 
+  
   it "should show the list of committees" do
 
-    visit "/"
-    show_filtered_links "Texas"
-    click_on "Texas"
+    visit upper_committees_path
+    page.should have_content "Maryland Committees"
 
-    show_filtered_links "People"
-    click_on "People"
-
-    show_filtered_links "Senate Committees"
-    click_on "Senate Committees"
-
-    show_page_links
-
-    # Capybara.configure do |c|
-    #   c.app_host = "http://tx.example.com"
-    # end
-
-    # page.should have_content "Members"
+    click_on "Joint Committees"
   end
 
   def click_on text
@@ -48,9 +105,7 @@ describe "Committees Page" do
     puts "show_page_links:"
     puts "url: #{page.current_url.to_s}"
     links.each do |link|
-      if link.text =~ /Committees/
-        puts "  #{link.text.to_s} : #{link['href'].to_s}"
-      end
+      puts "  #{link.text.to_s} : #{link['href'].to_s}"
     end
   end
 

@@ -109,12 +109,12 @@ ma:
   name: Massachusetts
   fips_code: 25
   official_url: http://www.mass.gov/legis/
-md:
-  abbrev: MD
-  name: Maryland
-  fips_code: 24
-  launch_date: 2010-04-01
-  official_url: http://mlis.state.md.us/
+# md:
+  # abbrev: MD
+  # name: Maryland
+  # fips_code: 24
+  # launch_date: 2010-04-01
+  # official_url: http://mlis.state.md.us/
 me:
   abbrev: ME
   name: Maine
